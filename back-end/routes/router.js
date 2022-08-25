@@ -45,4 +45,3 @@ router.post("/uploads", checkAuth, upload.single("image"), (req, res) => {
     url: `/uploads/${req.file.originalname}`,
   });
 });
-router.get("/sorted", PostController.sorted);
