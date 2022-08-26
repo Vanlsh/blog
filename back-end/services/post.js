@@ -6,14 +6,17 @@ class PostService {
       title: body.title,
       text: body.text,
       imageUrl: body.imageUrl,
-      tags: body.tags,
+      tags: body.tags.split(",").map((item) => item.trim()),
       user: userId,
     });
     const post = await doc.save();
     return post;
   }
-  async getAll(sort) {
-    switch (sort) {
+  async getAll(query) {
+    if (query.tag) {
+      return await PostModel.find({ tags: query.tag }).populate("user").exec();
+    }
+    switch (query.sort) {
       case "popular":
         return await PostModel.find()
           .populate("user")
@@ -52,7 +55,7 @@ class PostService {
         title: body.title,
         text: body.text,
         imageUrl: body.imageUrl,
-        tags: body.tags.split(","),
+        tags: body.tags.split(",").map((item) => item.trim()),
         user: userId,
       }
     );

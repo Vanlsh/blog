@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { registerValidator, loginValidator } from "../validations/auth.js";
 import { handleValidationErrors, checkAuth } from "../utils/index.js";
-import { UserController, PostController } from "../controllers/index.js";
+import {
+  UserController,
+  PostController,
+  CommentController,
+} from "../controllers/index.js";
 import { postCreateValidator } from "../validations/post.js";
 import { upload } from "../middleware/uploadImage.js";
 
@@ -45,3 +49,5 @@ router.post("/uploads", checkAuth, upload.single("image"), (req, res) => {
     url: `/uploads/${req.file.originalname}`,
   });
 });
+
+router.post("/comment/:id", checkAuth, CommentController.create);

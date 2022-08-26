@@ -12,7 +12,7 @@ export const create = async (req, res) => {
 
 export const getAll = async (req, res) => {
   try {
-    const posts = await PostService.getAll(req.query.sort);
+    const posts = await PostService.getAll(req.query);
     res.status(200).json(posts);
   } catch (error) {
     console.log(error);
