@@ -1,4 +1,5 @@
 import { PostService } from "../services/index.js";
+import { PostController } from "./index.js";
 
 export const create = async (req, res) => {
   try {
@@ -54,6 +55,16 @@ export const getLastTags = async (req, res) => {
   try {
     const tags = await PostService.getLastTags();
     res.status(200).json(tags);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json("Error");
+  }
+};
+
+export const getPostComments = async (req, res) => {
+  try {
+    const comments = await PostService.getPostComments(req.params.id);
+    res.status(200).json(comments);
   } catch (error) {
     console.log(error);
     res.status(500).json("Error");

@@ -40,7 +40,12 @@ class PostService {
       {
         returnDocument: "after",
       }
-    ).populate("user");
+    )
+      .populate("user")
+      .populate({
+        path: "comments",
+        populate: { path: "user", select: "fullName avatarUrl" },
+      });
     return post;
   }
   async remove(id) {
@@ -68,6 +73,13 @@ class PostService {
       .flat()
       .slice(0, 5);
     return tags;
+  }
+  async getPostComments(postId) {
+    const post = await PostModel.findById(postId).populate({
+      path: "comments",
+      populate: { path: "user", select: "fullName avatarUrl" },
+    });
+    return post.comments;
   }
 }
 

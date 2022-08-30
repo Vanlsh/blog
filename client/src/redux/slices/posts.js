@@ -33,6 +33,7 @@ const postsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
+    // get post
     [fetchPosts.pending]: (state) => {
       state.posts.items = [];
       state.posts.status = "loading";
@@ -45,6 +46,7 @@ const postsSlice = createSlice({
       state.posts.items = [];
       state.posts.status = "error";
     },
+    // Get tags
     [fetchTags.pending]: (state) => {
       state.tags.status = "loading";
       state.tags.items = [];

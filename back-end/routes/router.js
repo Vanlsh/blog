@@ -7,6 +7,7 @@ import {
   CommentController,
 } from "../controllers/index.js";
 import { postCreateValidator } from "../validations/post.js";
+import { commentCreateValidator } from "../validations/comment.js";
 import { upload } from "../middleware/uploadImage.js";
 
 export const router = new Router();
@@ -27,6 +28,8 @@ router.get("/auth/me", checkAuth, UserController.getMe);
 router.get("/posts", PostController.getAll);
 router.get("/tags", PostController.getLastTags);
 router.get("/post/:id", PostController.getOne);
+router.get("/post/comment/:id", PostController.getPostComments);
+
 router.post(
   "/post",
   checkAuth,
@@ -50,4 +53,11 @@ router.post("/uploads", checkAuth, upload.single("image"), (req, res) => {
   });
 });
 
-router.post("/comment/:id", checkAuth, CommentController.create);
+router.post(
+  "/comment",
+  checkAuth,
+  commentCreateValidator,
+  handleValidationErrors,
+  CommentController.create
+);
+router.get("/comments", CommentController.getComments);

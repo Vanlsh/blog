@@ -1,18 +1,20 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { Post } from "../components/Post";
-import { Index } from "../components/AddComment";
+import { AddComment } from "../components/AddComment";
 import { CommentsBlock } from "../components/CommentsBlock";
+import { selectIsAuth } from "../redux/slices/auth";
 import axios from "../axios";
 import ReactMarkdown from "react-markdown";
 
 export const FullPost = () => {
   const [data, setData] = React.useState();
   const [isLoading, setIsLoading] = React.useState(true);
-
+  const isAuth = useSelector(selectIsAuth);
   const { id } = useParams();
-
   React.useEffect(() => {
+    console.log(data);
     axios
       .get(`/post/${id}`)
       .then((res) => {
@@ -38,32 +40,14 @@ export const FullPost = () => {
         user={data.user}
         createdAt={data.createdAt}
         viewsCount={data.viewsCount}
-        commentsCount={3}
+        commentsCount={data.comments.length}
         tags={data.tags}
         isFullPost
       >
         <ReactMarkdown children={data.text} />
       </Post>
-      <CommentsBlock
-        items={[
-          {
-            user: {
-              fullName: "Вася Пупкин",
-              avatarUrl: "https://mui.com/static/images/avatar/1.jpg",
-            },
-            text: "Это тестовый комментарий 555555",
-          },
-          {
-            user: {
-              fullName: "Иван Иванов",
-              avatarUrl: "https://mui.com/static/images/avatar/2.jpg",
-            },
-            text: "When displaying three lines or more, the avatar is not aligned at the top. You should set the prop to align the avatar at the top",
-          },
-        ]}
-        isLoading={false}
-      >
-        <Index />
+      <CommentsBlock items={data.comments} isLoading={false}>
+        {isAuth ? <AddComment id={data._id} /> : ""}
       </CommentsBlock>
     </>
   );
