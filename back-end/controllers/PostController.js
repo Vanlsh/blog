@@ -60,7 +60,6 @@ export const getLastTags = async (req, res) => {
     res.status(500).json("Error");
   }
 };
-
 export const getPostComments = async (req, res) => {
   try {
     const comments = await PostService.getPostComments(req.params.id);

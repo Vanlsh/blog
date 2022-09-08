@@ -6,17 +6,22 @@ import { router } from "./routes/router.js";
 
 const app = express();
 dotenv.config();
+
 //Const
+
 const PORT = process.env.PORT || 4444;
 const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_NAME = process.env.DB_NAME;
+
 //Middleware
+
 app.use("/api/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(cors());
 
 //Routes
+
 app.use("/api", router);
 
 async function start() {

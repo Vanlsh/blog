@@ -22,3 +22,31 @@ export const getComments = async (req, res) => {
     });
   }
 };
+export const updateComment = async (req, res) => {
+  try {
+    const comment = await CommentService.update(
+      req.params.id,
+      req.body.comment
+    );
+    res.status(200).json(comment);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Something wrong",
+    });
+  }
+};
+export const removeComment = async (req, res) => {
+  try {
+    const comment = await CommentService.remove(
+      req.params.commentId,
+      req.body.postId
+    );
+    res.status(200).json(comment);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Something wrong",
+    });
+  }
+};

@@ -39,6 +39,7 @@ export const fetchComments = createAsyncThunk(
     }
   }
 );
+
 export const commentSlice = createSlice({
   name: "comment",
   initialState,

@@ -18,6 +18,7 @@ export const AddComment = ({ id }) => {
         comment,
       };
       await dispatch(createComment(fields));
+      setComment("");
     } else {
       alert("Comment can not be empty");
     }
@@ -31,6 +32,7 @@ export const AddComment = ({ id }) => {
             label="Write comment"
             variant="outlined"
             maxRows={10}
+            value={comment}
             onChange={(e) => setComment(e.target.value)}
             multiline
             fullWidth

@@ -7,6 +7,7 @@ import { Post } from "../components/Post";
 import { TagsBlock } from "../components/TagsBlock";
 import { CommentsBlock } from "../components/CommentsBlock";
 import { fetchPosts, fetchTags } from "../redux/slices/posts";
+import { Box } from "@mui/material";
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ export const Home = () => {
     dispatch(fetchPosts(value));
     dispatch(fetchTags());
   }, [value]);
+
   return (
     <>
       <Tabs style={{ marginBottom: 15 }} value={value} onChange={handleChange}>
@@ -30,7 +32,7 @@ export const Home = () => {
         <Tab label="Popular" value={"popular"} />
       </Tabs>
       <Grid container spacing={4}>
-        <Grid xs={8} item>
+        <Grid xs={12} sm={12} lg={8} item>
           {(isPostsLoading ? [...Array(5)] : posts.items).map((obj, index) =>
             isPostsLoading ? (
               <Post key={index} isLoading={true} />
@@ -43,16 +45,18 @@ export const Home = () => {
                 user={obj.user}
                 createdAt={obj.createdAt}
                 viewsCount={obj.viewsCount}
-                commentsCount={3}
+                commentsCount={obj.comments.length}
                 tags={obj.tags}
                 isEditable={userData?._id === obj.user._id}
               />
             )
           )}
         </Grid>
-        <Grid xs={4} item>
-          <TagsBlock items={tags.items} isLoading={isTagsLoading} />
-          <CommentsBlock />
+        <Grid xs={0} sm={0} lg={4} item>
+          <Box sx={{ display: { xs: "none", sm: "none", lg: "block" } }}>
+            <TagsBlock items={tags.items} isLoading={isTagsLoading} />
+            <CommentsBlock />
+          </Box>
         </Grid>
       </Grid>
     </>

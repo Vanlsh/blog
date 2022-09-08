@@ -29,7 +29,6 @@ router.get("/posts", PostController.getAll);
 router.get("/tags", PostController.getLastTags);
 router.get("/post/:id", PostController.getOne);
 router.get("/post/comment/:id", PostController.getPostComments);
-
 router.post(
   "/post",
   checkAuth,
@@ -61,3 +60,5 @@ router.post(
   CommentController.create
 );
 router.get("/comments", CommentController.getComments);
+router.patch("/comments/:id", CommentController.updateComment);
+router.patch("/comments/delete/:commentId", CommentController.removeComment);

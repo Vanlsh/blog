@@ -32,7 +32,6 @@ export const Post = ({
   }
 
   const onClickRemove = () => {
-    console.log(id);
     if (window.confirm("Are you sure?")) dispatch(fetchRemovePost(id));
   };
 

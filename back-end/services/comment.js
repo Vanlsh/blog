@@ -23,8 +23,31 @@ class CommentService {
       .limit(5);
     return comments;
   }
-  async remove(id) {
-    return await PostModel.findByIdAndDelete(id);
+  async update(id, updatedComment) {
+    const comment = await CommentModel.updateOne(
+      {
+        _id: id,
+      },
+      {
+        comment: updatedComment,
+      }
+    );
+    return comment;
+  }
+
+  async remove(commentId, postId) {
+    const { comments } = await PostModel.findById(postId);
+    const newComments = comments.filter((item) => {
+      return String(item) !== commentId;
+    });
+    const updatedPost = await PostModel.updateOne(
+      { _id: postId },
+      {
+        comments: newComments,
+      }
+    );
+    await CommentModel.findByIdAndDelete(commentId);
+    return updatedPost;
   }
 }
 

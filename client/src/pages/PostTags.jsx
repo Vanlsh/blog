@@ -29,28 +29,25 @@ export const PostTags = () => {
       <Typography variant="h2" component="h3">
         # {tag}
       </Typography>
-      <Grid container spacing={4}>
-        <Grid xs={8} item>
-          {(postsLoading ? [...Array(5)] : posts).map((obj, index) =>
-            postsLoading ? (
-              <Post key={index} isLoading={true} />
-            ) : (
-              <Post
-                key={index}
-                id={obj._id}
-                title={obj.title}
-                imageUrl={obj.imageUrl}
-                user={obj.user}
-                createdAt={obj.createdAt}
-                viewsCount={obj.viewsCount}
-                commentsCount={3}
-                tags={obj.tags}
-                isEditable={userData?._id === obj.user._id}
-              />
-            )
-          )}
-        </Grid>
-      </Grid>
+
+      {(postsLoading ? [...Array(5)] : posts).map((obj, index) =>
+        postsLoading ? (
+          <Post key={index} isLoading={true} />
+        ) : (
+          <Post
+            key={index}
+            id={obj._id}
+            title={obj.title}
+            imageUrl={obj.imageUrl}
+            user={obj.user}
+            createdAt={obj.createdAt}
+            viewsCount={obj.viewsCount}
+            commentsCount={obj.comments.length}
+            tags={obj.tags}
+            isEditable={userData?._id === obj.user._id}
+          />
+        )
+      )}
     </>
   );
 };

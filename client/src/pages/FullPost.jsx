@@ -14,7 +14,6 @@ export const FullPost = () => {
   const isAuth = useSelector(selectIsAuth);
   const { id } = useParams();
   React.useEffect(() => {
-    console.log(data);
     axios
       .get(`/post/${id}`)
       .then((res) => {
@@ -25,7 +24,7 @@ export const FullPost = () => {
         console.log(err);
         alert("Ops something wrong ");
       });
-  }, []);
+  }, [id]);
 
   if (isLoading) {
     return <Post isLoading={isLoading} isFullPost />;

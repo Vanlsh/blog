@@ -82,5 +82,4 @@ class PostService {
     return post.comments;
   }
 }
-
 export default new PostService();

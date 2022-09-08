@@ -18,6 +18,7 @@ export const fetchRemovePost = createAsyncThunk(
 );
 
 const initialState = {
+  commentsCount: 0,
   posts: {
     items: [],
     status: "loading",
