@@ -26,6 +26,6 @@ export const getMe = async (req, res) => {
     const userData = await UserService.getMe(req.userId);
     res.status(200).json(userData);
   } catch (err) {
-    return res.status(404).json({ message: "opp" });
+    return res.status(404).json({ message: err.message });
   }
 };

@@ -25,8 +25,12 @@ export const Login = () => {
     },
     mode: "onChange",
   });
+  React.useEffect(() => {
+    console.log(isAuth);
+  }, [isAuth]);
   const onSubmit = async (value) => {
     const data = await dispatch(fetchAuth(value));
+    console.log(data.payload);
     if (!data.payload) {
       alert("Failed to authenticate");
     }
@@ -34,6 +38,7 @@ export const Login = () => {
       window.localStorage.setItem("token", data.payload.token);
     }
   };
+
   if (isAuth) {
     return <Navigate to={"/"} />;
   }
