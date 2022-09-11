@@ -14,33 +14,14 @@ export const AddPost = () => {
   const { id } = useParams();
   const isEdit = Boolean(id);
   const isAuth = useSelector(selectIsAuth);
-  const navigate = useNavigate();
-  const [loading, setLoading] = React.useState(false);
   const [text, setText] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [tags, setTags] = React.useState([]);
   const [imageUrl, setImageUrl] = React.useState("");
+  const [selectedFile, setSelectedFile] = React.useState(null);
+  const [preview, setPreview] = React.useState(null);
   const inputFileRef = React.useRef(null);
-  const handleChangeFile = async (event) => {
-    try {
-      const formData = new FormData();
-      const file = event.target.files[0];
-      formData.append("image", file);
-      const { data } = await axios.post("/uploads", formData);
-      setImageUrl(data.url);
-    } catch (error) {
-      console.warn(error);
-      alert("Error!!!");
-    }
-  };
-
-  const onClickRemoveImage = () => {
-    setImageUrl("");
-  };
-
-  const onChange = React.useCallback((value) => {
-    setText(value);
-  }, []);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     if (id) {
@@ -52,20 +33,67 @@ export const AddPost = () => {
       });
     }
   }, []);
+
+  React.useEffect(() => {
+    if (!selectedFile) {
+      setPreview(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(selectedFile);
+    setPreview(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedFile]);
+
+  const onSelectFile = (e) => {
+    if (!e.target.files || !e.target.files.length) {
+      setSelectedFile(null);
+      return;
+    }
+    setSelectedFile(e.target.files[0]);
+    setImageUrl("");
+    e.target.value = null;
+  };
+
+  const onClickRemoveImage = () => {
+    setSelectedFile(null);
+    setImageUrl("");
+  };
+
+  const onChange = React.useCallback((value) => {
+    setText(value);
+  }, []);
+
+  const saveImage = async () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("image", selectedFile);
+      try {
+        const { data } = await axios.post("/uploads", formData);
+        return data.url;
+      } catch (error) {
+        console.warn(error);
+        alert("Error!!!");
+      }
+    }
+    if (imageUrl) {
+      return imageUrl;
+    }
+    return "";
+  };
+
   const onSubmit = async () => {
+    const imagePass = await saveImage();
     try {
-      setLoading(true);
       const fields = {
         title,
         tags,
         text,
-        imageUrl,
+        imageUrl: imagePass,
       };
       const { data } = isEdit
         ? await axios.patch(`/post/${id}`, fields)
         : await axios.post("/post", fields);
       const _id = isEdit ? id : data._id;
-
       navigate(`/posts/${_id}`);
     } catch (error) {
       console.warn(error);
@@ -87,7 +115,6 @@ export const AddPost = () => {
     }),
     []
   );
-
   if (!isAuth) {
     return <Navigate to={"/"} />;
   }
@@ -101,13 +128,8 @@ export const AddPost = () => {
       >
         Download preview
       </Button>
-      <input
-        ref={inputFileRef}
-        type="file"
-        onChange={handleChangeFile}
-        hidden
-      />
-      {imageUrl && (
+      <input ref={inputFileRef} type="file" onChange={onSelectFile} hidden />
+      {(selectedFile || imageUrl) && (
         <>
           <Button
             variant="contained"
@@ -118,7 +140,11 @@ export const AddPost = () => {
           </Button>
           <img
             className={styles.image}
-            src={`http://localhost:4444/api${imageUrl}`}
+            src={
+              preview
+                ? preview
+                : imageUrl && `http://localhost:4444/api${imageUrl}`
+            }
             alt="Uploaded"
           />
         </>
