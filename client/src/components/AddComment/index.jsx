@@ -1,19 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createComment } from "../../redux/slices/comment";
-import styles from "./AddComment.module.scss";
 import TextField from "@mui/material/TextField";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Grid } from "@mui/material";
 import { URL_BACK_END } from "../../config.js";
 
 export const AddComment = ({ id }) => {
@@ -38,64 +29,39 @@ export const AddComment = ({ id }) => {
       alert("Comment can not be empty");
     }
   };
-  if (true) {
-    return (
-      <Grid
-        container
-        spacing={1}
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-        sx={{ p: "15px 15px 0 15px" }}
-      >
-        <Grid item xs={"auto"}>
-          <Avatar
-            sx={{ bgcolor: randomColor() }}
-            src={user.avatarUrl && `${URL_BACK_END}/api${user.avatarUrl}`}
-          >
-            {user.fullName[0]}
-          </Avatar>
-        </Grid>
-        <Grid item xs>
-          <TextField
-            sx={{ mb: "10px" }}
-            label="Write comment"
-            variant="outlined"
-            maxRows={10}
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            multiline
-            fullWidth
-          />
-          <Button onClick={sendComment} variant="contained">
-            Send
-          </Button>
-        </Grid>
-      </Grid>
-    );
-  }
   return (
-    <>
-      <div className={styles.root}>
+    <Grid
+      elevation={0}
+      container
+      spacing={1}
+      direction="row"
+      justifyContent="flex-start"
+      alignItems="flex-start"
+      sx={{ p: "15px 15px 0 15px" }}
+    >
+      <Grid item xs={"auto"}>
         <Avatar
-          classes={{ root: styles.avatar }}
+          sx={{ bgcolor: randomColor() }}
           src={user.avatarUrl && `${URL_BACK_END}/api${user.avatarUrl}`}
+        >
+          {user.fullName[0]}
+        </Avatar>
+      </Grid>
+      <Grid item xs>
+        <TextField
+          sx={{ mb: "10px" }}
+          label="Write comment"
+          variant="outlined"
+          maxRows={10}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          multiline
+          fullWidth
         />
-        <div className={styles.form}>
-          <TextField
-            label="Write comment"
-            variant="outlined"
-            maxRows={10}
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            multiline
-            fullWidth
-          />
-          <Button onClick={sendComment} variant="contained">
-            Send
-          </Button>
-        </div>
-      </div>
-    </>
+        <Button onClick={sendComment} variant="contained">
+          Send
+        </Button>
+      </Grid>
+    </Grid>
   );
 };

@@ -44,6 +44,7 @@ export const Post = ({
   };
   return (
     <Card
+      elevation={0}
       sx={{
         maxWidth: "100%",
         mb: 2,
@@ -80,7 +81,7 @@ export const Post = ({
             component="img"
             height="100%"
             image={`${URL_BACK_END}/api${imageUrl}`}
-            alt="Paella dish"
+            alt="img"
           />
         )}
       </Box>
@@ -100,21 +101,22 @@ export const Post = ({
         </Typography>
         <Stack direction="row" spacing={1}>
           {tags.map((tag) => (
-            <Link
-              style={{
-                color: "black",
-                textDecoration: "none",
-                color: "gray",
-              }}
-              to={`/tags/${tag}`}
-            >
-              {`#${tag}`}
-            </Link>
+            <Box key={tag}>
+              <Link
+                style={{
+                  textDecoration: "none",
+                  color: "gray",
+                }}
+                to={`/tags/${tag}`}
+              >
+                {`#${tag}`}
+              </Link>
+            </Box>
           ))}
         </Stack>
         {children && <Box>{children}</Box>}
         <CardActions sx={{ mt: 1 }}>
-          <Stack direction="row" spacing={2}>
+          <Stack elevation={0} direction="row" spacing={2}>
             <Stack alignItems={"center"} direction="row" spacing={1}>
               <EyeIcon sx={{ height: "20px", color: "gray" }} />
               <Typography sx={{ fontSize: "15px", color: "gray" }}>

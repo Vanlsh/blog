@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import axios from "../axios";
-import { Typography, Grid } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { Post } from "../components/Post";
 
@@ -23,7 +23,6 @@ export const PostTags = () => {
         alert("Ops something wrong ");
       });
   }, []);
-  console.log(posts);
   return (
     <>
       <Typography variant="h2" component="h3">

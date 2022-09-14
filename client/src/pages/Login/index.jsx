@@ -1,14 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
+import { Typography, TextField, Paper, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import styles from "./Login.module.scss";
 import { fetchAuth, selectIsAuth } from "../../redux/slices/auth";
-import { convertLength } from "@mui/material/styles/cssUtils";
 
 export const Login = () => {
   const isAuth = useSelector(selectIsAuth);
@@ -16,7 +12,6 @@ export const Login = () => {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
@@ -25,12 +20,9 @@ export const Login = () => {
     },
     mode: "onChange",
   });
-  React.useEffect(() => {
-    console.log(isAuth);
-  }, [isAuth]);
+
   const onSubmit = async (value) => {
     const data = await dispatch(fetchAuth(value));
-    console.log(data.payload);
     if (!data.payload) {
       alert("Failed to authenticate");
     }
@@ -65,7 +57,13 @@ export const Login = () => {
           {...register("password", { required: "Enter your password" })}
           fullWidth
         />
-        <Button type="submit" size="large" variant="contained" fullWidth>
+        <Button
+          disabled={!isValid}
+          type="submit"
+          size="large"
+          variant="contained"
+          fullWidth
+        >
           Enter
         </Button>
       </form>

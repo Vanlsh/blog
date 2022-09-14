@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchPostComments } from "../../redux/slices/comment";
 import { TextField, Grid, Button, Stack } from "@mui/material";
 import axios from "../../axios";
@@ -20,7 +20,7 @@ export const EditComment = ({ commentId, prevComment, setEditId }) => {
     }
   };
   return (
-    <Grid container mb={1} ml={9} spacing={1}>
+    <Grid elevation={0} container mb={1} ml={9} spacing={1}>
       <Grid item xs={9}>
         <TextField
           label="Write comment"

@@ -16,6 +16,18 @@ export const Registration = () => {
   const [preview, setPreview] = React.useState("");
   const isAuth = useSelector(selectIsAuth);
   const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+      fullName: "",
+    },
+    mode: "onChange",
+  });
 
   React.useEffect(() => {
     if (!selectedFile) {
@@ -36,18 +48,6 @@ export const Registration = () => {
     e.target.value = null;
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm({
-    defaultValues: {
-      email: "",
-      password: "",
-      fullName: "",
-    },
-    mode: "onChange",
-  });
   const onSubmit = async (value) => {
     const formData = new FormData();
     formData.append("email", value.email);

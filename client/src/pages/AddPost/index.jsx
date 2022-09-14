@@ -1,15 +1,14 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate, Navigate, useParams } from "react-router-dom";
-import TextField from "@mui/material/TextField";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
 import SimpleMDE from "react-simplemde-editor";
 import { selectIsAuth } from "../../redux/slices/auth";
 import "easymde/dist/easymde.min.css";
-import styles from "./AddPost.module.scss";
 import axios from "../../axios";
 import { URL_BACK_END } from "../../config.js";
+import TextField from "@mui/material/TextField";
+import { CardMedia, Paper, Button, Stack } from "@mui/material";
 
 export const AddPost = () => {
   const { id } = useParams();
@@ -17,7 +16,7 @@ export const AddPost = () => {
   const isAuth = useSelector(selectIsAuth);
   const [text, setText] = React.useState("");
   const [title, setTitle] = React.useState("");
-  const [tags, setTags] = React.useState([]);
+  const [tags, setTags] = React.useState("");
   const [imageUrl, setImageUrl] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState(null);
   const [preview, setPreview] = React.useState(null);
@@ -60,9 +59,26 @@ export const AddPost = () => {
     setImageUrl("");
   };
 
-  const onChange = React.useCallback((value) => {
+  // for SimpleMDE
+  const onChange = React.useCallback(async (value) => {
     setText(value);
   }, []);
+
+  const options = React.useMemo(
+    () => ({
+      spellChecker: false,
+      maxHeight: "400px",
+      autofocus: true,
+      placeholder: "Enter text...",
+      status: false,
+      autosave: {
+        enabled: true,
+        delay: 1000,
+      },
+    }),
+    []
+  );
+  //
 
   const saveImage = async () => {
     if (selectedFile) {
@@ -112,24 +128,9 @@ export const AddPost = () => {
     }
   };
 
-  const options = React.useMemo(
-    () => ({
-      spellChecker: false,
-      maxHeight: "400px",
-      autofocus: true,
-      placeholder: "Enter text...",
-      status: false,
-      autosave: {
-        enabled: true,
-        delay: 1000,
-      },
-    }),
-    []
-  );
   if (!isAuth) {
     return <Navigate to={"/"} />;
   }
-
   return (
     <Paper elevation={0} style={{ padding: 30 }}>
       <Button
@@ -139,7 +140,13 @@ export const AddPost = () => {
       >
         Download preview
       </Button>
-      <input ref={inputFileRef} type="file" onChange={onSelectFile} hidden />
+      <input
+        ref={inputFileRef}
+        type="file"
+        onChange={onSelectFile}
+        hidden
+        accept=".png, .jpg, .jpeg"
+      />
       {(selectedFile || imageUrl) && (
         <>
           <Button
@@ -149,8 +156,9 @@ export const AddPost = () => {
           >
             Delete
           </Button>
-          <img
-            className={styles.image}
+          <CardMedia
+            component="img"
+            height="100%"
             src={
               preview ? preview : imageUrl && `${URL_BACK_END}/api${imageUrl}`
             }
@@ -158,38 +166,36 @@ export const AddPost = () => {
           />
         </>
       )}
-      <br />
-      <br />
-      <TextField
-        classes={{ root: styles.title }}
-        variant="standard"
-        placeholder="Title of the article..."
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        fullWidth
-      />
-      <TextField
-        classes={{ root: styles.tags }}
-        variant="standard"
-        placeholder="Tags"
-        value={tags}
-        onChange={(e) => setTags(e.target.value)}
-        fullWidth
-      />
-      <SimpleMDE
-        className={styles.editor}
-        value={text}
-        onChange={onChange}
-        options={options}
-      />
-      <div className={styles.buttons}>
-        <Button onClick={onSubmit} size="large" variant="contained">
-          {isEdit ? "Edit" : "Publish"}
-        </Button>
-        <a href="/">
-          <Button size="large">Cancel</Button>
-        </a>
-      </div>
+      <Stack sx={{ pt: 3 }} spacing={3}>
+        <TextField
+          variant="standard"
+          placeholder="Title of the article..."
+          value={title}
+          onChange={(e) => setTitle(e.target)}
+          fullWidth
+        />
+        <TextField
+          variant="standard"
+          placeholder="Tags"
+          value={tags}
+          onChange={(e) => setTags(e.target)}
+          fullWidth
+        />
+        <SimpleMDE value={text} onChange={onChange} options={options} />
+        <Stack direction="row" spacing={3}>
+          <Button onClick={onSubmit} size="large" variant="contained">
+            {isEdit ? "Edit" : "Publish"}
+          </Button>
+          <Link
+            to="/"
+            style={{
+              textDecoration: "none",
+            }}
+          >
+            <Button size="large">Cancel</Button>
+          </Link>
+        </Stack>
+      </Stack>
     </Paper>
   );
 };

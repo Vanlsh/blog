@@ -17,6 +17,7 @@ export const Home = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   const isPostsLoading = posts.status === "loading" || posts.status === "error";
   const isTagsLoading = tags.status === "loading" || posts.status === "error";
 
@@ -32,7 +33,7 @@ export const Home = () => {
         <Tab label="Popular" value={"popular"} />
       </Tabs>
       <Grid container spacing={4}>
-        <Grid xs={12} sm={12} lg={8} item>
+        <Grid elevation={1} xs={12} sm={12} lg={8} item>
           {(isPostsLoading ? [...Array(5)] : posts.items).map((obj, index) =>
             isPostsLoading ? (
               <Post key={index} isLoading={true} />
