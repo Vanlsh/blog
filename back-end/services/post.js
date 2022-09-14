@@ -54,11 +54,17 @@ class PostService {
     const post = await PostModel.findByIdAndDelete(id);
     if (post.imageUrl) {
       const fileName = post.imageUrl.split("/").slice(-1);
-      fs.unlink(`./uploads/${fileName}`, (error) => console.log(error));
+      fs.unlink(`./uploads/${fileName}`, (error) => {
+        if (error) {
+          throw error;
+        }
+      });
     }
     if (post.comments) {
       await Comment.deleteMany({ _id: { $in: post.comments } }, (error) => {
-        console.log(error);
+        if (error) {
+          throw error;
+        }
       });
     }
     return post;

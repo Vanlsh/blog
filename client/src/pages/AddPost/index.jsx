@@ -28,7 +28,7 @@ export const AddPost = () => {
       axios.get(`/post/${id}`).then(({ data }) => {
         setTitle(data.title);
         setText(data.text);
-        setTags(data.tags.join(","));
+        setTags(data.tags.join(", "));
         setImageUrl(data.imageUrl);
       });
     }
@@ -171,14 +171,14 @@ export const AddPost = () => {
           variant="standard"
           placeholder="Title of the article..."
           value={title}
-          onChange={(e) => setTitle(e.target)}
+          onChange={(e) => setTitle(e.target.value)}
           fullWidth
         />
         <TextField
           variant="standard"
           placeholder="Tags"
           value={tags}
-          onChange={(e) => setTags(e.target)}
+          onChange={(e) => setTags(e.target.value)}
           fullWidth
         />
         <SimpleMDE value={text} onChange={onChange} options={options} />

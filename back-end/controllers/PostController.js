@@ -32,8 +32,8 @@ export const getOne = async (req, res) => {
 
 export const remove = async (req, res) => {
   try {
-    const test = await PostService.remove(req.params.id);
-    res.status(200).json({ success: true });
+    const post = await PostService.remove(req.params.id);
+    res.status(200).json({ success: post });
   } catch (error) {
     console.log(error);
     res.status(500).json("Error");
