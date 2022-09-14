@@ -1,8 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import styles from "./Header.module.scss";
-import Container from "@mui/material/Container";
 import { logout, selectIsAuth } from "../../redux/slices/auth";
 import {
   styled,
@@ -30,95 +28,56 @@ export const Header = () => {
       window.localStorage.removeItem("token");
     }
   };
-  if (true) {
-    return (
-      <Box sx={{ flexGrow: 1, mb: 1 }}>
-        <AppBar elevation={0} position="static">
-          <StyledToolbar>
-            <Link style={{ textDecoration: "none" }} to={"/"}>
-              <Button size="large" variant="contained">
-                BLOG
-              </Button>
-            </Link>
-            {isAuth ? (
-              <Stack direction="row" spacing={2}>
-                <Link style={{ textDecoration: "none" }} to="/add-post">
-                  <Button
-                    sx={{
-                      display: { xs: "none", sm: "flex" },
-                    }}
-                    variant="contained"
-                  >
-                    Add post
-                  </Button>
-                  <IconButton sx={{ display: { xs: "flex", sm: "none" } }}>
-                    <AddIcon />
-                  </IconButton>
-                </Link>
-                <IconButton onClick={onClickLogout}>
-                  <LogoutIcon />
-                </IconButton>
-              </Stack>
-            ) : (
-              <Stack direction="row" spacing={2}>
-                <Link
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                    marginTop: "3px",
-                  }}
-                  to="/register"
-                >
-                  <Button variant="contained">Register</Button>
-                </Link>
-
-                <IconButton>
-                  <Link style={{ color: "white" }} to={"/login"}>
-                    <LoginIcon />
-                  </Link>
-                </IconButton>
-              </Stack>
-            )}
-          </StyledToolbar>
-        </AppBar>
-      </Box>
-    );
-  }
-
   return (
-    <div className={styles.root}>
-      <Container maxWidth="lg">
-        <div className={styles.inner}>
-          <Link className={styles.logo} to="/">
-            <div>BLOG</div>
+    <Box sx={{ flexGrow: 1, mb: 1 }}>
+      <AppBar elevation={0} position="static">
+        <StyledToolbar>
+          <Link style={{ textDecoration: "none" }} to={"/"}>
+            <Button size="large" variant="contained">
+              BLOG
+            </Button>
           </Link>
-          <div className={styles.buttons}>
-            {isAuth ? (
-              <>
-                <Link to="/add-post">
-                  <Button variant="contained">Write an article</Button>
-                </Link>
+          {isAuth ? (
+            <Stack direction="row" spacing={2}>
+              <Link style={{ textDecoration: "none" }} to="/add-post">
                 <Button
-                  onClick={onClickLogout}
+                  sx={{
+                    display: { xs: "none", sm: "flex" },
+                  }}
                   variant="contained"
-                  color="error"
                 >
-                  Logout
+                  Add post
                 </Button>
-              </>
-            ) : (
-              <>
-                <Link to="/login">
-                  <Button variant="outlined">Login</Button>
+                <IconButton sx={{ display: { xs: "flex", sm: "none" } }}>
+                  <AddIcon />
+                </IconButton>
+              </Link>
+              <IconButton onClick={onClickLogout}>
+                <LogoutIcon />
+              </IconButton>
+            </Stack>
+          ) : (
+            <Stack direction="row" spacing={2}>
+              <Link
+                style={{
+                  textDecoration: "none",
+                  color: "white",
+                  marginTop: "3px",
+                }}
+                to="/register"
+              >
+                <Button variant="contained">Register</Button>
+              </Link>
+
+              <IconButton>
+                <Link style={{ color: "white" }} to={"/login"}>
+                  <LoginIcon />
                 </Link>
-                <Link to="/register">
-                  <Button variant="contained">Crate account</Button>
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </Container>
-    </div>
+              </IconButton>
+            </Stack>
+          )}
+        </StyledToolbar>
+      </AppBar>
+    </Box>
   );
 };

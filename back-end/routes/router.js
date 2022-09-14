@@ -20,6 +20,7 @@ router.post(
 );
 router.post(
   "/auth/register",
+  upload.single("image"),
   registerValidator,
   handleValidationErrors,
   UserController.register
@@ -51,7 +52,12 @@ router.post("/uploads", checkAuth, upload.single("image"), (req, res) => {
     url: `/uploads/${req.file.originalname}`,
   });
 });
-
+router.patch(
+  "/uploads/:id",
+  checkAuth,
+  upload.single("image"),
+  PostController.updateImage
+);
 router.post(
   "/comment",
   checkAuth,

@@ -1,16 +1,17 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import UserModel from "../models/User.js";
+import { deleteAvatar } from "../controllers/UserController.js";
 
 class UserService {
-  async register(body) {
+  async register(body, avatarUrl) {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(body.password, salt);
     const doc = new UserModel({
       fullName: body.fullName,
       email: body.email,
       passwordHash: hash,
-      avatarUrl: body.avatarUrl,
+      avatarUrl,
     });
     const user = await doc.save();
     const token = jwt.sign(
@@ -60,6 +61,8 @@ class UserService {
     const { passwordHash, ...userData } = user._doc;
     return userData;
   }
+  async uploadAvatar() {}
+  async deleteAvatar(userId) {}
 }
 
 export default new UserService();

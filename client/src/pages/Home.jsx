@@ -17,8 +17,8 @@ export const Home = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const isPostsLoading = posts.status === "loading";
-  const isTagsLoading = tags.status === "loading";
+  const isPostsLoading = posts.status === "loading" || posts.status === "error";
+  const isTagsLoading = tags.status === "loading" || posts.status === "error";
 
   React.useEffect(() => {
     dispatch(fetchPosts(value));

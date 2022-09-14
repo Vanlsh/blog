@@ -1,14 +1,41 @@
-import React from 'react';
-import styles from './UserInfo.module.scss';
+import React from "react";
+import { URL_BACK_END } from "../../config.js";
+import { Avatar, CardHeader } from "@mui/material";
 
 export const UserInfo = ({ avatarUrl, fullName, additionalText }) => {
+  const date = new Date(additionalText);
+  const randomColor = () => {
+    const hex = Math.floor(Math.random() * 0xffffff);
+    return "#" + hex.toString(16);
+  };
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ][date.getMonth()];
+
+  const newDate = date.getDay() + " " + month + " " + date.getFullYear();
   return (
-    <div className={styles.root}>
-      <img className={styles.avatar} src={avatarUrl || '/noavatar.png'} alt={fullName} />
-      <div className={styles.userDetails}>
-        <span className={styles.userName}>{fullName}</span>
-        <span className={styles.additional}>{additionalText}</span>
-      </div>
-    </div>
+    <CardHeader
+      avatar={
+        <Avatar
+          sx={{ bgcolor: randomColor() }}
+          src={avatarUrl && `${URL_BACK_END}/api${avatarUrl}`}
+        >
+          {!avatarUrl && fullName[0]}
+        </Avatar>
+      }
+      title={fullName}
+      subheader={newDate}
+    />
   );
 };

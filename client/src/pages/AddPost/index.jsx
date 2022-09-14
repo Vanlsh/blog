@@ -9,6 +9,7 @@ import { selectIsAuth } from "../../redux/slices/auth";
 import "easymde/dist/easymde.min.css";
 import styles from "./AddPost.module.scss";
 import axios from "../../axios";
+import { URL_BACK_END } from "../../config.js";
 
 export const AddPost = () => {
   const { id } = useParams();
@@ -67,6 +68,15 @@ export const AddPost = () => {
     if (selectedFile) {
       const formData = new FormData();
       formData.append("image", selectedFile);
+      if (isEdit) {
+        try {
+          const { data } = await axios.patch(`/uploads/${id}`, formData);
+          return data.url;
+        } catch (error) {
+          console.warn(error);
+          alert("Error!!!");
+        }
+      }
       try {
         const { data } = await axios.post("/uploads", formData);
         return data.url;
@@ -78,6 +88,7 @@ export const AddPost = () => {
     if (imageUrl) {
       return imageUrl;
     }
+    id && (await axios.patch(`/uploads/${id}`));
     return "";
   };
 
@@ -97,7 +108,7 @@ export const AddPost = () => {
       navigate(`/posts/${_id}`);
     } catch (error) {
       console.warn(error);
-      alert("Error when creating the article");
+      alert(error.massage);
     }
   };
 
@@ -141,9 +152,7 @@ export const AddPost = () => {
           <img
             className={styles.image}
             src={
-              preview
-                ? preview
-                : imageUrl && `http://localhost:4444/api${imageUrl}`
+              preview ? preview : imageUrl && `${URL_BACK_END}/api${imageUrl}`
             }
             alt="Uploaded"
           />

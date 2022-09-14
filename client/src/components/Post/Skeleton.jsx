@@ -1,37 +1,34 @@
 import React from "react";
 import Stack from "@mui/material/Stack";
 import Skeleton from "@mui/material/Skeleton";
-
-import styles from "./Post.module.scss";
+import { Card} from "@mui/material";
 
 export const PostSkeleton = () => {
-  return (
-    <div className={styles.skeleton}>
-      <Stack spacing={1}>
+    return (
+      <Card sx={{ maxWidth: "100%", mb: 2, pb: 3 }}>
         <Skeleton variant="rectangular" width="100%" height={300} />
-        <div className={styles.skeletonContent}>
-          <div className={styles.skeletonUser}>
-            <Skeleton
-              variant="circular"
-              width={40}
-              height={40}
-              style={{ marginRight: 10 }}
-            />
-            <div className={styles.skeletonUserDetails}>
-              <Skeleton variant="text" width={60} height={20} />
-              <Skeleton variant="text" width={100} height={15} />
-            </div>
-          </div>
-          <div className={styles.skeletonInfo}>
-            <Skeleton variant="text" width="80%" height={45} />
-            <div className={styles.skeletonTags}>
-              <Skeleton variant="text" width={40} height={30} />
-              <Skeleton variant="text" width={40} height={30} />
-              <Skeleton variant="text" width={40} height={30} />
-            </div>
-          </div>
-        </div>
-      </Stack>
-    </div>
-  );
+        <Stack
+          alignItems={"center"}
+          sx={{ m: "15px 15px 0 15px" }}
+          direction="row"
+          spacing={2}
+        >
+          <Skeleton variant="circular" width={40} height={40} />
+          <Skeleton variant="text" width={350} height={60} />
+        </Stack>
+        <Stack
+          sx={{ ml: "15px" }}
+          direction="column"
+          justifyContent="space-between"
+        >
+          <Skeleton variant="text" width={406} height={60} />
+          <Stack direction="row" spacing={2}>
+            <Skeleton variant="text" width={50} height={25} />
+            <Skeleton variant="text" width={50} height={25} />
+            <Skeleton variant="text" width={50} height={25} />
+          </Stack>
+        </Stack>
+      </Card>
+    );
+  
 };

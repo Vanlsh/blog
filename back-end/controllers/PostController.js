@@ -1,5 +1,4 @@
 import { PostService } from "../services/index.js";
-import { PostController } from "./index.js";
 
 export const create = async (req, res) => {
   try {
@@ -64,6 +63,23 @@ export const getPostComments = async (req, res) => {
   try {
     const comments = await PostService.getPostComments(req.params.id);
     res.status(200).json(comments);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json("Error");
+  }
+};
+
+export const updateImage = async (req, res) => {
+  try {
+    await PostService.updateImage(req.params.id);
+    if (req.file?.originalname) {
+      return res.status(200).json({
+        url: `/uploads/${req.file.originalname}`,
+      });
+    }
+    return res.status(200).json({
+      url: "",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json("Error");

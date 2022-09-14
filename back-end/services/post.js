@@ -1,4 +1,6 @@
 import PostModel from "../models/Post.js";
+import Comment from "../models/Comment.js";
+import fs from "fs";
 
 class PostService {
   async create(body, userId) {
@@ -49,7 +51,17 @@ class PostService {
     return post;
   }
   async remove(id) {
-    return await PostModel.findByIdAndDelete(id);
+    const post = await PostModel.findByIdAndDelete(id);
+    if (post.imageUrl) {
+      const fileName = post.imageUrl.split("/").slice(-1);
+      fs.unlink(`./uploads/${fileName}`, (error) => console.log(error));
+    }
+    if (post.comments) {
+      await Comment.deleteMany({ _id: { $in: post.comments } }, (error) => {
+        console.log(error);
+      });
+    }
+    return post;
   }
   async update(id, body, userId) {
     const post = await PostModel.updateOne(
@@ -80,6 +92,14 @@ class PostService {
       populate: { path: "user", select: "fullName avatarUrl" },
     });
     return post.comments;
+  }
+
+  async updateImage(postId) {
+    const post = await PostModel.findById(postId);
+    if (post.imageUrl) {
+      const fileName = post.imageUrl.split("/").slice(-1);
+      fs.unlink(`./uploads/${fileName}`, (error) => console.log(error));
+    }
   }
 }
 export default new PostService();

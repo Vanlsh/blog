@@ -11,13 +11,34 @@ import { fetchRegister, selectIsAuth } from "../../redux/slices/auth";
 import styles from "./Login.module.scss";
 
 export const Registration = () => {
+  const inputFileRef = React.useRef(null);
+  const [selectedFile, setSelectedFile] = React.useState("");
+  const [preview, setPreview] = React.useState("");
   const isAuth = useSelector(selectIsAuth);
   const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    if (!selectedFile) {
+      setPreview("");
+      return;
+    }
+    const objectUrl = URL.createObjectURL(selectedFile);
+    setPreview(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedFile]);
+
+  const onSelectFile = (e) => {
+    if (!e.target.files || !e.target.files.length) {
+      setSelectedFile("");
+      return;
+    }
+    setSelectedFile(e.target.files[0]);
+    e.target.value = null;
+  };
 
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
@@ -28,7 +49,12 @@ export const Registration = () => {
     mode: "onChange",
   });
   const onSubmit = async (value) => {
-    const data = await dispatch(fetchRegister(value));
+    const formData = new FormData();
+    formData.append("email", value.email);
+    formData.append("password", value.password);
+    formData.append("fullName", value.fullName);
+    formData.append("image", selectedFile);
+    const data = await dispatch(fetchRegister(formData));
     if (!data.payload) {
       alert("Failed to register");
     }
@@ -45,9 +71,18 @@ export const Registration = () => {
       <Typography classes={{ root: styles.title }} variant="h5">
         Create account
       </Typography>
-      <div className={styles.avatar}>
-        <Avatar sx={{ width: 100, height: 100 }} />
-      </div>
+      <Avatar
+        onClick={() => inputFileRef.current.click()}
+        src={preview}
+        sx={{ width: 100, height: 100, margin: "10px auto 20px" }}
+      />
+      <input
+        ref={inputFileRef}
+        type="file"
+        onChange={onSelectFile}
+        accept=".jpg,.png,.jpeg"
+        hidden
+      />
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
           className={styles.field}
