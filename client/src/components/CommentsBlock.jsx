@@ -18,6 +18,9 @@ import { EditComment } from "./EditComment";
 import { fetchPostComments, fetchComments } from "../redux/slices/comment";
 import axios from "../axios";
 import { URL_BACK_END } from "../config.js";
+import { getRandomColor } from "../helper/View";
+
+const randomColor = getRandomColor();
 
 export const CommentsBlock = ({ children }) => {
   const { id } = useParams();
@@ -26,11 +29,6 @@ export const CommentsBlock = ({ children }) => {
   const userData = useSelector((state) => state.auth.data);
   const isCommentLoading = loading === "loading" || loading === "error";
   const [editId, setEditId] = React.useState("");
-
-  const randomColor = () => {
-    const hex = Math.floor(Math.random() * 0xffffff);
-    return "#" + hex.toString(16);
-  };
 
   React.useEffect(() => {
     if (id) {
@@ -73,7 +71,7 @@ export const CommentsBlock = ({ children }) => {
                       obj.user.avatarUrl &&
                       `${URL_BACK_END}/api${obj.user.avatarUrl}`
                     }
-                    sx={{ backgroundColor: randomColor() }}
+                    sx={{ backgroundColor: randomColor }}
                   >
                     {" "}
                     {obj.user.fullName[0]}

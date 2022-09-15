@@ -9,7 +9,7 @@ import axios from "../axios";
 import ReactMarkdown from "react-markdown";
 
 export const FullPost = () => {
-  const [data, setData] = React.useState();
+  const [post, setPost] = React.useState();
   const [isLoading, setIsLoading] = React.useState(true);
   const isAuth = useSelector(selectIsAuth);
   const { id } = useParams();
@@ -17,7 +17,7 @@ export const FullPost = () => {
     axios
       .get(`/post/${id}`)
       .then((res) => {
-        setData(res.data);
+        setPost(res.data);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -32,21 +32,11 @@ export const FullPost = () => {
 
   return (
     <>
-      <Post
-        id={data._id}
-        title={data.title}
-        imageUrl={data.imageUrl}
-        user={data.user}
-        createdAt={data.createdAt}
-        viewsCount={data.viewsCount}
-        commentsCount={data.comments.length}
-        tags={data.tags}
-        isFullPost
-      >
-        <ReactMarkdown children={data.text} />
+      <Post post={post} isFullPost>
+        <ReactMarkdown children={post.text} />
       </Post>
-      <CommentsBlock items={data.comments} isLoading={false}>
-        {isAuth ? <AddComment id={data._id} /> : ""}
+      <CommentsBlock items={post.comments} isLoading={false}>
+        {isAuth ? <AddComment id={post._id} /> : ""}
       </CommentsBlock>
     </>
   );

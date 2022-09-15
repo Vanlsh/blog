@@ -17,7 +17,6 @@ export const Home = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
   const isPostsLoading = posts.status === "loading" || posts.status === "error";
   const isTagsLoading = tags.status === "loading" || posts.status === "error";
 
@@ -34,21 +33,14 @@ export const Home = () => {
       </Tabs>
       <Grid container spacing={4}>
         <Grid elevation={1} xs={12} sm={12} lg={8} item>
-          {(isPostsLoading ? [...Array(5)] : posts.items).map((obj, index) =>
+          {(isPostsLoading ? [...Array(5)] : posts.items).map((post, index) =>
             isPostsLoading ? (
               <Post key={index} isLoading={true} />
             ) : (
               <Post
                 key={index}
-                id={obj._id}
-                title={obj.title}
-                imageUrl={obj.imageUrl}
-                user={obj.user}
-                createdAt={obj.createdAt}
-                viewsCount={obj.viewsCount}
-                commentsCount={obj.comments.length}
-                tags={obj.tags}
-                isEditable={userData?._id === obj.user._id}
+                post={post}
+                isEditable={userData?._id === post.user._id}
               />
             )
           )}

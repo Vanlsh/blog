@@ -20,28 +20,17 @@ import {
   Typography,
 } from "@mui/material";
 
-export const Post = ({
-  id,
-  title,
-  createdAt,
-  imageUrl,
-  user,
-  viewsCount,
-  commentsCount,
-  tags,
-  children,
-  isFullPost,
-  isLoading,
-  isEditable,
-}) => {
+export const Post = ({ post, children, isFullPost, isLoading, isEditable }) => {
   const dispatch = useDispatch();
+
+  const onClickRemove = () => {
+    if (window.confirm("Are you sure?")) dispatch(fetchRemovePost(post._id));
+  };
+
   if (isLoading) {
     return <PostSkeleton />;
   }
 
-  const onClickRemove = () => {
-    if (window.confirm("Are you sure?")) dispatch(fetchRemovePost(id));
-  };
   return (
     <Card
       elevation={0}
@@ -66,7 +55,7 @@ export const Post = ({
               },
             }}
           >
-            <Link to={`/posts/${id}/edit`}>
+            <Link to={`/posts/${post._id}/edit`}>
               <IconButton color="primary">
                 <EditIcon />
               </IconButton>
@@ -76,31 +65,31 @@ export const Post = ({
             </IconButton>
           </Box>
         )}
-        {imageUrl && (
+        {post.imageUrl && (
           <CardMedia
             component="img"
             height="100%"
-            image={`${URL_BACK_END}/api${imageUrl}`}
+            image={`${URL_BACK_END}/api${post.imageUrl}`}
             alt="img"
           />
         )}
       </Box>
-      <UserInfo {...user} additionalText={createdAt} />
+      <UserInfo {...post.user} additionalText={post.createdAt} />
       <CardContent sx={{ pt: 0 }}>
         <Typography variant="h4" sx={{ color: "black", fontWeight: 500 }}>
           {isFullPost ? (
-            title
+            post.title
           ) : (
             <Link
               style={{ color: "black", textDecoration: "none" }}
-              to={`/posts/${id}`}
+              to={`/posts/${post._id}`}
             >
-              {title}
+              {post.title}
             </Link>
           )}
         </Typography>
         <Stack direction="row" spacing={1}>
-          {tags.map((tag) => (
+          {post.tags.map((tag) => (
             <Box key={tag}>
               <Link
                 style={{
@@ -120,13 +109,13 @@ export const Post = ({
             <Stack alignItems={"center"} direction="row" spacing={1}>
               <EyeIcon sx={{ height: "20px", color: "gray" }} />
               <Typography sx={{ fontSize: "15px", color: "gray" }}>
-                {viewsCount}
+                {post.viewsCount}
               </Typography>
             </Stack>
             <Stack alignItems={"center"} direction="row" spacing={1}>
               <CommentIcon sx={{ height: "15px", color: "gray" }} />
               <Typography sx={{ fontSize: "15px", color: "gray" }}>
-                {commentsCount}
+                {post.commentsCount}
               </Typography>
             </Stack>
           </Stack>

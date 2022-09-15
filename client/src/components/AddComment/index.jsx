@@ -6,16 +6,14 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import { Grid } from "@mui/material";
 import { URL_BACK_END } from "../../config.js";
+import { getRandomColor } from "../../helper/View";
+
+const randomColor = getRandomColor();
 
 export const AddComment = ({ id }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.data);
   const [comment, setComment] = React.useState("");
-
-  const randomColor = () => {
-    const hex = Math.floor(Math.random() * 0xffffff);
-    return "#" + hex.toString(16);
-  };
 
   const sendComment = async () => {
     if (comment) {
@@ -41,7 +39,7 @@ export const AddComment = ({ id }) => {
     >
       <Grid item xs={"auto"}>
         <Avatar
-          sx={{ bgcolor: randomColor() }}
+          sx={{ bgcolor: randomColor }}
           src={user.avatarUrl && `${URL_BACK_END}/api${user.avatarUrl}`}
         >
           {user.fullName[0]}
