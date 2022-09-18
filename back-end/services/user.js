@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import UserModel from "../models/User.js";
-import { deleteAvatar } from "../controllers/UserController.js";
 
 class UserService {
   async register(body, avatarUrl) {
@@ -61,8 +60,6 @@ class UserService {
     const { passwordHash, ...userData } = user._doc;
     return userData;
   }
-  async uploadAvatar() {}
-  async deleteAvatar(userId) {}
 }
 
 export default new UserService();

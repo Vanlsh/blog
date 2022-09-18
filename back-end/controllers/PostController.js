@@ -2,7 +2,34 @@ import { PostService } from "../services/index.js";
 
 export const create = async (req, res) => {
   try {
-    const post = await PostService.create(req.body, req.userId);
+    const post = await PostService.create(
+      req.body,
+      req.userId,
+      req.file?.originalname
+    );
+    res.status(200).json(post);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json("Error");
+  }
+};
+export const remove = async (req, res) => {
+  try {
+    const post = await PostService.remove(req.params.id);
+    res.status(200).json({ success: post });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json("Error");
+  }
+};
+
+export const update = async (req, res) => {
+  try {
+    const post = await PostService.update(
+      req.params.id,
+      req.body,
+      req.file?.originalname
+    );
     res.status(200).json(post);
   } catch (error) {
     console.log(error);
@@ -24,26 +51,6 @@ export const getOne = async (req, res) => {
   try {
     const post = await PostService.getOne(req.params.id);
     res.status(200).json(post);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json("Error");
-  }
-};
-
-export const remove = async (req, res) => {
-  try {
-    const post = await PostService.remove(req.params.id);
-    res.status(200).json({ success: post });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json("Error");
-  }
-};
-
-export const update = async (req, res) => {
-  try {
-    await PostService.update(req.params.id, req.body, req.userId);
-    res.status(200).json({ success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json("Error");

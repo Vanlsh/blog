@@ -1,13 +1,21 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { Typography, TextField, Paper, Button } from "@mui/material";
+import {
+  Typography,
+  TextField,
+  Paper,
+  Button,
+  Box,
+  Stack,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import styles from "./Login.module.scss";
 import { fetchAuth, selectIsAuth } from "../../redux/slices/auth";
 
 export const Login = () => {
   const isAuth = useSelector(selectIsAuth);
+  const [loginError, setLoginError] = React.useState(false);
   const dispatch = useDispatch();
   const {
     register,
@@ -22,9 +30,10 @@ export const Login = () => {
   });
 
   const onSubmit = async (value) => {
+    setLoginError(false);
     const data = await dispatch(fetchAuth(value));
     if (!data.payload) {
-      alert("Failed to authenticate");
+      setLoginError(true);
     }
     if ("token" in data.payload) {
       window.localStorage.setItem("token", data.payload.token);
@@ -57,6 +66,7 @@ export const Login = () => {
           {...register("password", { required: "Enter your password" })}
           fullWidth
         />
+
         <Button
           disabled={!isValid}
           type="submit"
@@ -66,6 +76,13 @@ export const Login = () => {
         >
           Enter
         </Button>
+        {loginError && (
+          <Stack direction="row" justifyContent="center">
+            <Typography variant="h7" sx={{ color: "red", p: 0.5 }}>
+              Wrong login or password!
+            </Typography>
+          </Stack>
+        )}
       </form>
     </Paper>
   );

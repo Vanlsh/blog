@@ -80,46 +80,19 @@ export const AddPost = () => {
   );
   //
 
-  const saveImage = async () => {
-    if (selectedFile) {
-      const formData = new FormData();
-      formData.append("image", selectedFile);
-      if (isEdit) {
-        try {
-          const { data } = await axios.patch(`/uploads/${id}`, formData);
-          return data.url;
-        } catch (error) {
-          console.warn(error);
-          alert("Error!!!");
-        }
-      }
-      try {
-        const { data } = await axios.post("/uploads", formData);
-        return data.url;
-      } catch (error) {
-        console.warn(error);
-        alert("Error!!!");
-      }
-    }
-    if (imageUrl) {
-      return imageUrl;
-    }
-    id && (await axios.patch(`/uploads/${id}`));
-    return "";
-  };
-
   const onSubmit = async () => {
-    const imagePass = await saveImage();
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("tags", tags);
+    formData.append("text", text);
+    if (selectedFile) {
+      formData.append("image", selectedFile);
+    }
+    formData.append("imageUrl", imageUrl);
     try {
-      const fields = {
-        title,
-        tags,
-        text,
-        imageUrl: imagePass,
-      };
       const { data } = isEdit
-        ? await axios.patch(`/post/${id}`, fields)
-        : await axios.post("/post", fields);
+        ? await axios.patch(`/post/${id}`, formData)
+        : await axios.post("/post", formData);
       const _id = isEdit ? id : data._id;
       navigate(`/posts/${_id}`);
     } catch (error) {

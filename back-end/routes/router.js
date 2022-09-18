@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { registerValidator, loginValidator } from "../validations/auth.js";
-import { handleValidationErrors, checkAuth } from "../utils/index.js";
+import {
+  handleValidationErrors,
+  checkAuth,
+  upload,
+} from "../middleware/index.js";
 import {
   UserController,
   PostController,
@@ -8,7 +12,6 @@ import {
 } from "../controllers/index.js";
 import { postCreateValidator } from "../validations/post.js";
 import { commentCreateValidator } from "../validations/comment.js";
-import { upload } from "../middleware/uploadImage.js";
 
 export const router = new Router();
 
@@ -26,6 +29,8 @@ router.post(
   UserController.register
 );
 router.get("/auth/me", checkAuth, UserController.getMe);
+
+// post`s routes
 router.get("/posts", PostController.getAll);
 router.get("/tags", PostController.getLastTags);
 router.get("/post/:id", PostController.getOne);
@@ -33,6 +38,7 @@ router.get("/post/comment/:id", PostController.getPostComments);
 router.post(
   "/post",
   checkAuth,
+  upload.single("image"),
   postCreateValidator,
   handleValidationErrors,
   PostController.create
@@ -42,6 +48,7 @@ router.delete("/post/:id", checkAuth, PostController.remove);
 router.patch(
   "/post/:id",
   checkAuth,
+  upload.single("image"),
   postCreateValidator,
   handleValidationErrors,
   PostController.update

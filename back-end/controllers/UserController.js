@@ -42,10 +42,3 @@ export const updateAvatar = async (req, res) => {
     return res.status(404).json({ message: err.message });
   }
 };
-
-export const deleteAvatar = async (req, res) => {
-  try {
-  } catch (err) {
-    return res.status(404).json({ message: err.message });
-  }
-};

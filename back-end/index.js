@@ -7,7 +7,7 @@ import { router } from "./routes/router.js";
 const app = express();
 dotenv.config();
 
-//Const
+// Const
 
 const PORT = process.env.PORT || 4444;
 const DB_USER = process.env.DB_USER;

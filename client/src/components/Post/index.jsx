@@ -115,7 +115,7 @@ export const Post = ({ post, children, isFullPost, isLoading, isEditable }) => {
             <Stack alignItems={"center"} direction="row" spacing={1}>
               <CommentIcon sx={{ height: "15px", color: "gray" }} />
               <Typography sx={{ fontSize: "15px", color: "gray" }}>
-                {post.commentsCount}
+                {post.comments.length}
               </Typography>
             </Stack>
           </Stack>
